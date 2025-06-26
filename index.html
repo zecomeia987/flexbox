@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Educativo - 1º Ano</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 800px;
+            width: 90%;
+            margin: 20px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            min-width: 200px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .subject-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            display: block;
+            margin: 20px auto;
+            width: 300px;
+            padding: 20px;
+            font-size: 1.2em;
+        }
+
+        .subject-btn.math {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+        }
+
+        .subject-btn.history {
+            background: linear-gradient(45deg, #ff9ff3, #f368e0);
+        }
+
+        .subject-btn.science {
+            background: linear-gradient(45deg, #00d2d3, #54a0ff);
+        }
+
+        .quiz-container {
+            text-align: left;
+        }
+
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .options li {
+            background: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .options li:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+        }
+
+        .options li.selected {
+            background: #e8f5e8;
+            border-color: #4caf50;
+        }
+
+        .options li.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+
+        .options li.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .score {
+            font-size: 1.5em;
+            color: #333;
+            margin: 20px 0;
+        }
+
+        .result {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .result.excellent {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .result.good {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .result.needs-improvement {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .subject-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Tela Inicial -->
+        <div id="welcome-screen" class="screen active">
+            <h1>🎓 Quiz Educativo</h1>
+            <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
+                Teste seus conhecimentos do 1º ano do Ensino Médio
+            </p>
+            <button class="btn" onclick="showSubjects()">Entrar</button>
+        </div>
+
+        <!-- Tela de Seleção de Matérias -->
+        <div id="subjects-screen" class="screen">
+            <h2>Escolha uma matéria:</h2>
+            <button class="subject-btn math" onclick="startQuiz('math')">
+                📐 Matemática
+            </button>
+            <button class="subject-btn history" onclick="startQuiz('history')">
+                📚 História
+            </button>
+            <button class="subject-btn science" onclick="startQuiz('science')">
+                🔬 Ciências
+            </button>
+            <button class="btn" onclick="showWelcome()" style="margin-top: 20px;">
+                Voltar
+            </button>
+        </div>
+
+        <!-- Tela do Quiz -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-container">
+                <div class="progress">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div id="question-counter"></div>
+                <div id="current-question"></div>
+                <button class="btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
+                    Próxima
+                </button>
+                <button class="btn" onclick="showSubjects()" style="margin-top: 20px;">
+                    Voltar ao Menu
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Resultado -->
+        <div id="result-screen" class="screen">
+            <h2>Resultado Final</h2>
+            <div id="final-score" class="score"></div>
+            <div id="result-message" class="result"></div>
+            <button class="btn" onclick="showSubjects()">Tentar Novamente</button>
+            <button class="btn" onclick="showWelcome()">Início</button>
+        </div>
+    </div>
+
+    <script>
+        // Dados das perguntas
+        const questions = {
+            math: [
+                {
+                    question: "Qual é o resultado de 2x + 3 = 11?",
+                    options: ["x = 4", "x = 5", "x = 6", "x = 7"],
+                    correct: 0
+                },
+                {
+                    question: "Qual é a área de um retângulo com base 8 cm e altura 5 cm?",
+                    options: ["30 cm²", "35 cm²", "40 cm²", "45 cm²"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o valor de √64?",
+                    options: ["6", "7", "8", "9"],
+                    correct: 2
+                },
+                {
+                    question: "Em uma função f(x) = 2x + 1, qual é f(3)?",
+                    options: ["5", "6", "7", "8"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o perímetro de um quadrado com lado 6 cm?",
+                    options: ["18 cm", "20 cm", "24 cm", "36 cm"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o resultado de (3 + 2)²?",
+                    options: ["10", "15", "20", "25"],
+                    correct: 3
+                },
+                {
+                    question: "Em uma PA com a₁ = 2 e r = 3, qual é o 5º termo?",
+                    options: ["12", "14", "16", "17"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é o valor de sen(30°)?",
+                    options: ["1/2", "√2/2", "√3/2", "1"],
+                    correct: 0
+                },
+                {
+                    question: "Qual é a solução da equação x² - 5x + 6 = 0?",
+                    options: ["x = 1 e x = 6", "x = 2 e x = 3", "x = 1 e x = 5", "x = 2 e x = 4"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é o volume de um cubo com aresta 4 cm?",
+                    options: ["48 cm³", "56 cm³", "64 cm³", "72 cm³"],
+                    correct: 2
+                }
+            ],
+            history: [
+                {
+                    question: "Em que ano ocorreu a Proclamação da República no Brasil?",
+                    options: ["1888", "1889", "1890", "1891"],
+                    correct: 1
+                },
+                {
+                    question: "Quem foi o primeiro presidente do Brasil?",
+                    options: ["Getúlio Vargas", "Deodoro da Fonseca", "Floriano Peixoto", "Prudente de Morais"],
+                    correct: 1
+                },
+                {
+                    question: "A Primeira Guerra Mundial ocorreu entre:",
+                    options: ["1912-1918", "1914-1918", "1916-1920", "1918-1922"],
+                    correct: 1
+                },
+                {
+                    question: "Qual foi a principal causa da Revolução Industrial?",
+                    options: ["Descoberta da América", "Invenção da máquina a vapor", "Queda da Bastilha", "Reforma Protestante"],
+                    correct: 1
+                },
+                {
+                    question: "O período colonial brasileiro durou aproximadamente:",
+                    options: ["250 anos", "300 anos", "350 anos", "400 anos"],
+                    correct: 1
+                },
+                {
+                    question: "A Revolução Francesa começou em:",
+                    options: ["1789", "1790", "1791", "1792"],
+                    correct: 0
+                },
+                {
+                    question: "Quem descobriu o Brasil?",
+                    options: ["Vasco da Gama", "Pedro Álvares Cabral", "Cristóvão Colombo", "Fernão de Magalhães"],
+                    correct: 1
+                },
+                {
+                    question: "A abolição da escravatura no Brasil ocorreu em:",
+                    options: ["1885", "1886", "1887", "1888"],
+                    correct: 3
+                },
+                {
+                    question: "O Império Romano foi dividido em:",
+                    options: ["285 d.C.", "295 d.C.", "305 d.C.", "315 d.C."],
+                    correct: 1
+                },
+                {
+                    question: "A Idade Média durou aproximadamente:",
+                    options: ["800 anos", "900 anos", "1000 anos", "1100 anos"],
+                    correct: 2
+                }
+            ],
+            science: [
+                {
+                    question: "Qual é a fórmula química da água?",
+                    options: ["H₂O", "CO₂", "NaCl", "CH₄"],
+                    correct: 0
+                },
+                {
+                    question: "Quantos cromossomos tem uma célula humana normal?",
+                    options: ["44", "46", "48", "50"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é a velocidade da luz no vácuo?",
+                    options: ["300.000 km/s", "299.792.458 m/s", "3 × 10⁸ m/s", "Todas as anteriores"],
+                    correct: 3
+                },
+                {
+                    question: "Qual organela é responsável pela respiração celular?",
+                    options: ["Núcleo", "Ribossomo", "Mitocôndria", "Cloroplasto"],
+                    correct: 2
+                },
+                {
+                    question: "O que é fotossíntese?",
+                    options: ["Respiração das plantas", "Processo de produção de glicose", "Divisão celular", "Transporte de seiva"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é o elemento químico mais abundante no universo?",
+                    options: ["Oxigênio", "Carbono", "Hidrogênio", "Hélio"],
+                    correct: 2
+                },
+                {
+                    question: "Quantos ossos tem o corpo humano adulto?",
+                    options: ["204", "206", "208", "210"],
+                    correct: 1
+                },
+                {
+                    question: "Qual é a unidade básica da vida?",
+                    options: ["Átomo", "Molécula", "Célula", "Tecido"],
+                    correct: 2
+                },
+                {
+                    question: "O que é DNA?",
+                    options: ["Ácido desoxirribonucleico", "Ácido ribonucleico", "Proteína", "Carboidrato"],
+                    correct: 0
+                },
+                {
+                    question: "Qual planeta é conhecido como 'Planeta Vermelho'?",
+                    options: ["Vênus", "Marte", "Júpiter", "Saturno"],
+                    correct: 1
+                }
+            ]
+        };
+
+        let currentSubject = '';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function showWelcome() {
+            showScreen('welcome-screen');
+        }
+
+        function showSubjects() {
+            showScreen('subjects-screen');
+            resetQuiz();
+        }
+
+        function startQuiz(subject) {
+            currentSubject = subject;
+            currentQuestionIndex = 0;
+            score = 0;
+            showScreen('quiz-screen');
+            displayQuestion();
+        }
+
+        function displayQuestion() {
+            const question = questions[currentSubject][currentQuestionIndex];
+            const questionContainer = document.getElementById('current-question');
+            const counter = document.getElementById('question-counter');
+            const progressBar = document.getElementById('progress-bar');
+
+            counter.innerHTML = `Pergunta ${currentQuestionIndex + 1} de ${questions[currentSubject].length}`;
+            
+            const progress = ((currentQuestionIndex + 1) / questions[currentSubject].length) * 100;
+            progressBar.style.width = progress + '%';
+
+            questionContainer.innerHTML = `
+                <div class="question">
+                    <h3>${question.question}</h3>
+                    <ul class="options">
+                        ${question.options.map((option, index) => 
+                            `<li onclick="selectAnswer(${index})" data-index="${index}">${option}</li>`
+                        ).join('')}
+                    </ul>
+                </div>
+            `;
+
+            selectedAnswer = null;
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function selectAnswer(index) {
+            selectedAnswer = index;
+            const options = document.querySelectorAll('.options li');
+            
+            options.forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            options[index].classList.add('selected');
+            
+            setTimeout(() => {
+                checkAnswer();
+            }, 500);
+        }
+
+        function checkAnswer() {
+            const question = questions[currentSubject][currentQuestionIndex];
+            const options = document.querySelectorAll('.options li');
+            
+            options.forEach((option, index) => {
+                option.onclick = null; // Desabilita cliques
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedAnswer && index !== question.correct) {
+                    option.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer === question.correct) {
+                score++;
+            }
+
+            document.getElementById('next-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < questions[currentSubject].length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            const totalQuestions = questions[currentSubject].length;
+            const percentage = (score / totalQuestions) * 100;
+            
+            document.getElementById('final-score').innerHTML = 
+                `Você acertou ${score} de ${totalQuestions} perguntas (${percentage.toFixed(1)}%)`;
+            
+            const resultMessage = document.getElementById('result-message');
+            
+            if (percentage >= 80) {
+                resultMessage.className = 'result excellent';
+                resultMessage.innerHTML = '🎉 Excelente! Você domina bem o assunto!';
+            } else if (percentage >= 60) {
+                resultMessage.className = 'result good';
+                resultMessage.innerHTML = '👍 Bom trabalho! Continue estudando para melhorar ainda mais!';
+            } else {
+                resultMessage.className = 'result needs-improvement';
+                resultMessage.innerHTML = '📚 Precisa estudar mais! Não desista, a prática leva à perfeição!';
+            }
+            
+            showScreen('result-screen');
+        }
+
+        function resetQuiz() {
+            currentSubject = '';
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+        }
+    </script>
+</body>
+</html>
