@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Educativo - 1º Ano</title>
+    <title>🎓 Quiz Educativo Premium</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,70 +14,197 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow-x: hidden;
+        }
+
+        /* Partículas de fundo */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
         }
 
         .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
             padding: 40px;
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             width: 90%;
             margin: 20px;
+            position: relative;
+            z-index: 10;
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .screen {
             display: none;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .screen.active {
             display: block;
         }
 
-        h1 {
-            color: #333;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header com pontuação */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
-            font-size: 2.5em;
+            padding: 15px 20px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 15px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .points-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .points-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-size: 3em;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         h2 {
-            color: #555;
-            margin-bottom: 20px;
-            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .welcome-content {
+            margin-bottom: 40px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 10px;
+            min-width: 120px;
+            color: white;
+            font-weight: 600;
         }
 
         .btn {
             background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 18px 35px;
             border-radius: 50px;
-            font-size: 1.1em;
+            font-size: 1.2em;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             margin: 10px;
             min-width: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
         .subject-btn {
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             display: block;
             margin: 20px auto;
+            width: 350px;
+            padding: 25px;
+            font-size: 1.3em;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .subject-btn:hover::after {
             width: 300px;
-            padding: 20px;
-            font-size: 1.2em;
+            height: 300px;
         }
 
         .subject-btn.math {
@@ -94,37 +223,77 @@
             text-align: left;
         }
 
-        .question {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            border-left: 5px solid #667eea;
+        }
+
+        .question {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            border-left: 8px solid #667eea;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .question::before {
+            content: '❓';
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            font-size: 2em;
+            background: white;
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .question h3 {
             color: #333;
-            margin-bottom: 15px;
-            font-size: 1.3em;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            font-weight: 600;
         }
 
         .options {
             list-style: none;
+            display: grid;
+            gap: 15px;
         }
 
         .options li {
             background: white;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 20px;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s ease;
-            border: 2px solid transparent;
+            border: 3px solid transparent;
+            position: relative;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .options li::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            transition: all 0.3s ease;
         }
 
         .options li:hover {
             background: #e3f2fd;
             border-color: #2196f3;
+            transform: translateX(10px);
         }
 
         .options li.selected {
@@ -132,55 +301,157 @@
             border-color: #4caf50;
         }
 
+        .options li.selected::before {
+            background: #4caf50;
+            border-color: #4caf50;
+        }
+
         .options li.correct {
-            background: #d4edda;
+            background: linear-gradient(45deg, #d4edda, #c3e6cb);
             border-color: #28a745;
+            animation: correctAnswer 0.5s ease;
         }
 
         .options li.incorrect {
-            background: #f8d7da;
+            background: linear-gradient(45deg, #f8d7da, #f5c6cb);
             border-color: #dc3545;
+            animation: incorrectAnswer 0.5s ease;
+        }
+
+        @keyframes correctAnswer {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes incorrectAnswer {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+            100% { transform: translateX(0); }
         }
 
         .progress {
             background: #e0e0e0;
-            height: 10px;
-            border-radius: 5px;
+            height: 15px;
+            border-radius: 10px;
             margin: 20px 0;
             overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .progress-bar {
             background: linear-gradient(45deg, #667eea, #764ba2);
             height: 100%;
-            transition: width 0.3s ease;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .score {
-            font-size: 1.5em;
-            color: #333;
-            margin: 20px 0;
+            font-size: 2em;
+            font-weight: 700;
+            margin: 30px 0;
+            text-align: center;
         }
 
         .result {
-            padding: 20px;
-            border-radius: 10px;
-            margin: 20px 0;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 25px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: resultShine 3s infinite;
+        }
+
+        @keyframes resultShine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         .result.excellent {
-            background: #d4edda;
+            background: linear-gradient(45deg, #d4edda, #c3e6cb);
             color: #155724;
+            border: 3px solid #28a745;
         }
 
         .result.good {
-            background: #fff3cd;
+            background: linear-gradient(45deg, #fff3cd, #ffeaa7);
             color: #856404;
+            border: 3px solid #ffc107;
         }
 
         .result.needs-improvement {
-            background: #f8d7da;
+            background: linear-gradient(45deg, #f8d7da, #f5c6cb);
             color: #721c24;
+            border: 3px solid #dc3545;
+        }
+
+        .points-animation {
+            position: fixed;
+            font-size: 2em;
+            font-weight: bold;
+            color: #4caf50;
+            pointer-events: none;
+            z-index: 1000;
+            animation: pointsFloat 2s ease-out forwards;
+        }
+
+        @keyframes pointsFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px);
+            }
+        }
+
+        .streak-indicator {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            margin: 10px 0;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
 
         @media (max-width: 600px) {
@@ -189,227 +460,285 @@
             }
 
             h1 {
-                font-size: 2em;
+                font-size: 2.2em;
             }
 
             .subject-btn {
                 width: 100%;
             }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .points-display {
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Partículas de fundo -->
+    <div class="particles" id="particles"></div>
+
     <div class="container">
+        <!-- Header com pontuação (visível apenas durante o quiz) -->
+        <div id="game-header" class="header" style="display: none;">
+            <div>🎓 Quiz Educativo</div>
+            <div class="points-display">
+                <div class="points-item">
+                    <span>💰</span>
+                    <span id="total-points">0</span>
+                </div>
+                <div class="points-item">
+                    <span>⭐</span>
+                    <span id="streak-count">0</span>
+                </div>
+                <div class="points-item">
+                    <span>🏆</span>
+                    <span id="level">1</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Tela Inicial -->
         <div id="welcome-screen" class="screen active">
-            <h1>🎓 Quiz Educativo</h1>
-            <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">
-                Teste seus conhecimentos do 1º ano do Ensino Médio
-            </p>
-            <button class="btn" onclick="showSubjects()">Entrar</button>
+            <h1>🎓 Quiz Educativo Premium</h1>
+            <div class="welcome-content">
+                <p style="font-size: 1.3em; color: #666; margin-bottom: 30px;">
+                    ✨ Teste seus conhecimentos e ganhe pontos! ✨
+                </p>
+                <div class="welcome-stats">
+                    <div class="stat-item">
+                        <div style="font-size: 2em;">📚</div>
+                        <div>30 Perguntas</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="font-size: 2em;">💰</div>
+                        <div>Sistema de Pontos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div style="font-size: 2em;">🏆</div>
+                        <div>Ranking</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn" onclick="showSubjects()">🚀 Começar Aventura</button>
         </div>
 
         <!-- Tela de Seleção de Matérias -->
         <div id="subjects-screen" class="screen">
-            <h2>Escolha uma matéria:</h2>
+            <h2>🎯 Escolha sua Aventura:</h2>
             <button class="subject-btn math" onclick="startQuiz('math')">
                 📐 Matemática
+                <div style="font-size: 0.9em; margin-top: 5px;">Números e Cálculos</div>
             </button>
             <button class="subject-btn history" onclick="startQuiz('history')">
                 📚 História
+                <div style="font-size: 0.9em; margin-top: 5px;">Fatos e Descobertas</div>
             </button>
             <button class="subject-btn science" onclick="startQuiz('science')">
                 🔬 Ciências
+                <div style="font-size: 0.9em; margin-top: 5px;">Natureza e Experimentos</div>
             </button>
-            <button class="btn" onclick="showWelcome()" style="margin-top: 20px;">
-                Voltar
+            <button class="btn" onclick="showWelcome()" style="margin-top: 30px;">
+                ⬅️ Voltar
             </button>
         </div>
 
         <!-- Tela do Quiz -->
         <div id="quiz-screen" class="screen">
             <div class="quiz-container">
+                <div class="question-header">
+                    <div id="question-counter" style="font-size: 1.2em; font-weight: 600; color: #667eea;"></div>
+                    <div id="current-streak" class="streak-indicator" style="display: none;">
+                        🔥 Sequência: <span id="streak-display">0</span>
+                    </div>
+                </div>
                 <div class="progress">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
-                <div id="question-counter"></div>
                 <div id="current-question"></div>
                 <button class="btn" id="next-btn" onclick="nextQuestion()" style="display: none;">
-                    Próxima
+                    ➡️ Próxima Pergunta
                 </button>
                 <button class="btn" onclick="showSubjects()" style="margin-top: 20px;">
-                    Voltar ao Menu
+                    🏠 Menu Principal
                 </button>
             </div>
         </div>
 
         <!-- Tela de Resultado -->
         <div id="result-screen" class="screen">
-            <h2>Resultado Final</h2>
+            <h2>🎉 Resultado Final</h2>
             <div id="final-score" class="score"></div>
+            <div id="points-earned" style="font-size: 1.5em; color: #4caf50; margin: 20px 0;"></div>
             <div id="result-message" class="result"></div>
-            <button class="btn" onclick="showSubjects()">Tentar Novamente</button>
-            <button class="btn" onclick="showWelcome()">Início</button>
+            <div style="margin: 30px 0;">
+                <button class="btn" onclick="showSubjects()">🔄 Tentar Novamente</button>
+                <button class="btn" onclick="showWelcome()">🏠 Início</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Dados das perguntas
+        // Dados das perguntas (mais fáceis)
         const questions = {
             math: [
                 {
-                    question: "Qual é o resultado de 2x + 3 = 11?",
-                    options: ["x = 4", "x = 5", "x = 6", "x = 7"],
-                    correct: 0
-                },
-                {
-                    question: "Qual é a área de um retângulo com base 8 cm e altura 5 cm?",
-                    options: ["30 cm²", "35 cm²", "40 cm²", "45 cm²"],
-                    correct: 2
-                },
-                {
-                    question: "Qual é o valor de √64?",
+                    question: "Quanto é 5 + 3?",
                     options: ["6", "7", "8", "9"],
                     correct: 2
                 },
                 {
-                    question: "Em uma função f(x) = 2x + 1, qual é f(3)?",
+                    question: "Qual é o resultado de 10 - 4?",
                     options: ["5", "6", "7", "8"],
-                    correct: 2
-                },
-                {
-                    question: "Qual é o perímetro de um quadrado com lado 6 cm?",
-                    options: ["18 cm", "20 cm", "24 cm", "36 cm"],
-                    correct: 2
-                },
-                {
-                    question: "Qual é o resultado de (3 + 2)²?",
-                    options: ["10", "15", "20", "25"],
-                    correct: 3
-                },
-                {
-                    question: "Em uma PA com a₁ = 2 e r = 3, qual é o 5º termo?",
-                    options: ["12", "14", "16", "17"],
                     correct: 1
                 },
                 {
-                    question: "Qual é o valor de sen(30°)?",
-                    options: ["1/2", "√2/2", "√3/2", "1"],
-                    correct: 0
+                    question: "Quanto é 3 × 4?",
+                    options: ["10", "11", "12", "13"],
+                    correct: 2
                 },
                 {
-                    question: "Qual é a solução da equação x² - 5x + 6 = 0?",
-                    options: ["x = 1 e x = 6", "x = 2 e x = 3", "x = 1 e x = 5", "x = 2 e x = 4"],
+                    question: "Qual é o resultado de 20 ÷ 4?",
+                    options: ["4", "5", "6", "7"],
                     correct: 1
                 },
                 {
-                    question: "Qual é o volume de um cubo com aresta 4 cm?",
-                    options: ["48 cm³", "56 cm³", "64 cm³", "72 cm³"],
+                    question: "Quanto é 2 + 2 + 2?",
+                    options: ["4", "5", "6", "7"],
+                    correct: 2
+                },
+                {
+                    question: "Qual número vem depois de 19?",
+                    options: ["18", "20", "21", "22"],
+                    correct: 1
+                },
+                {
+                    question: "Quanto é 15 - 5?",
+                    options: ["8", "9", "10", "11"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é a metade de 10?",
+                    options: ["3", "4", "5", "6"],
+                    correct: 2
+                },
+                {
+                    question: "Quanto é 6 × 2?",
+                    options: ["10", "11", "12", "13"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o dobro de 7?",
+                    options: ["12", "13", "14", "15"],
                     correct: 2
                 }
             ],
             history: [
                 {
-                    question: "Em que ano ocorreu a Proclamação da República no Brasil?",
-                    options: ["1888", "1889", "1890", "1891"],
+                    question: "Quem descobriu o Brasil?",
+                    options: ["Cristóvão Colombo", "Pedro Álvares Cabral", "Vasco da Gama", "Fernão de Magalhães"],
                     correct: 1
+                },
+                {
+                    question: "Em que ano o Brasil foi descoberto?",
+                    options: ["1498", "1499", "1500", "1501"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é a capital do Brasil?",
+                    options: ["São Paulo", "Rio de Janeiro", "Brasília", "Salvador"],
+                    correct: 2
                 },
                 {
                     question: "Quem foi o primeiro presidente do Brasil?",
-                    options: ["Getúlio Vargas", "Deodoro da Fonseca", "Floriano Peixoto", "Prudente de Morais"],
+                    options: ["Getúlio Vargas", "Deodoro da Fonseca", "Juscelino Kubitschek", "Tancredo Neves"],
                     correct: 1
                 },
                 {
-                    question: "A Primeira Guerra Mundial ocorreu entre:",
-                    options: ["1912-1918", "1914-1918", "1916-1920", "1918-1922"],
+                    question: "Em que continente fica o Brasil?",
+                    options: ["América do Norte", "América do Sul", "Europa", "África"],
                     correct: 1
                 },
                 {
-                    question: "Qual foi a principal causa da Revolução Industrial?",
-                    options: ["Descoberta da América", "Invenção da máquina a vapor", "Queda da Bastilha", "Reforma Protestante"],
-                    correct: 1
-                },
-                {
-                    question: "O período colonial brasileiro durou aproximadamente:",
-                    options: ["250 anos", "300 anos", "350 anos", "400 anos"],
-                    correct: 1
-                },
-                {
-                    question: "A Revolução Francesa começou em:",
-                    options: ["1789", "1790", "1791", "1792"],
-                    correct: 0
-                },
-                {
-                    question: "Quem descobriu o Brasil?",
-                    options: ["Vasco da Gama", "Pedro Álvares Cabral", "Cristóvão Colombo", "Fernão de Magalhães"],
-                    correct: 1
-                },
-                {
-                    question: "A abolição da escravatura no Brasil ocorreu em:",
-                    options: ["1885", "1886", "1887", "1888"],
-                    correct: 3
-                },
-                {
-                    question: "O Império Romano foi dividido em:",
-                    options: ["285 d.C.", "295 d.C.", "305 d.C.", "315 d.C."],
-                    correct: 1
-                },
-                {
-                    question: "A Idade Média durou aproximadamente:",
-                    options: ["800 anos", "900 anos", "1000 anos", "1100 anos"],
+                    question: "Qual foi a primeira capital do Brasil?",
+                    options: ["Rio de Janeiro", "São Paulo", "Salvador", "Brasília"],
                     correct: 2
+                },
+                {
+                    question: "O Brasil foi colonizado por qual país?",
+                    options: ["Espanha", "Portugal", "França", "Inglaterra"],
+                    correct: 1
+                },
+                {
+                    question: "Em que ano acabou a escravidão no Brasil?",
+                    options: ["1886", "1887", "1888", "1889"],
+                    correct: 2
+                },
+                {
+                    question: "Quem assinou a Lei Áurea?",
+                    options: ["Dom Pedro I", "Dom Pedro II", "Princesa Isabel", "Getúlio Vargas"],
+                    correct: 2
+                },
+                {
+                    question: "Quantos estados tem o Brasil?",
+                    options: ["25", "26", "27", "28"],
+                    correct: 1
                 }
             ],
             science: [
                 {
-                    question: "Qual é a fórmula química da água?",
-                    options: ["H₂O", "CO₂", "NaCl", "CH₄"],
-                    correct: 0
-                },
-                {
-                    question: "Quantos cromossomos tem uma célula humana normal?",
-                    options: ["44", "46", "48", "50"],
+                    question: "Quantos planetas tem o Sistema Solar?",
+                    options: ["7", "8", "9", "10"],
                     correct: 1
                 },
                 {
-                    question: "Qual é a velocidade da luz no vácuo?",
-                    options: ["300.000 km/s", "299.792.458 m/s", "3 × 10⁸ m/s", "Todas as anteriores"],
-                    correct: 3
-                },
-                {
-                    question: "Qual organela é responsável pela respiração celular?",
-                    options: ["Núcleo", "Ribossomo", "Mitocôndria", "Cloroplasto"],
+                    question: "Qual é o planeta mais próximo do Sol?",
+                    options: ["Vênus", "Terra", "Mercúrio", "Marte"],
                     correct: 2
                 },
                 {
-                    question: "O que é fotossíntese?",
-                    options: ["Respiração das plantas", "Processo de produção de glicose", "Divisão celular", "Transporte de seiva"],
+                    question: "O que as plantas precisam para fazer fotossíntese?",
+                    options: ["Água e terra", "Sol e água", "Ar e terra", "Sol e ar"],
                     correct: 1
-                },
-                {
-                    question: "Qual é o elemento químico mais abundante no universo?",
-                    options: ["Oxigênio", "Carbono", "Hidrogênio", "Hélio"],
-                    correct: 2
                 },
                 {
                     question: "Quantos ossos tem o corpo humano adulto?",
-                    options: ["204", "206", "208", "210"],
+                    options: ["200", "206", "210", "220"],
                     correct: 1
                 },
                 {
-                    question: "Qual é a unidade básica da vida?",
-                    options: ["Átomo", "Molécula", "Célula", "Tecido"],
+                    question: "Qual é o maior mamífero do mundo?",
+                    options: ["Elefante", "Girafa", "Baleia azul", "Hipopótamo"],
                     correct: 2
                 },
                 {
-                    question: "O que é DNA?",
-                    options: ["Ácido desoxirribonucleico", "Ácido ribonucleico", "Proteína", "Carboidrato"],
+                    question: "De que é feita a água?",
+                    options: ["Hidrogênio e oxigênio", "Carbono e oxigênio", "Nitrogênio e hidrogênio", "Só oxigênio"],
                     correct: 0
                 },
                 {
-                    question: "Qual planeta é conhecido como 'Planeta Vermelho'?",
-                    options: ["Vênus", "Marte", "Júpiter", "Saturno"],
+                    question: "Quantos corações tem um polvo?",
+                    options: ["1", "2", "3", "4"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o animal mais rápido do mundo?",
+                    options: ["Leopardo", "Guepardo", "Leão", "Tigre"],
                     correct: 1
+                },
+                {
+                    question: "Quantos dentes tem um adulto?",
+                    options: ["28", "30", "32", "34"],
+                    correct: 2
+                },
+                {
+                    question: "Qual é o maior órgão do corpo humano?",
+                    options: ["Fígado", "Pulmão", "Coração", "Pele"],
+                    correct: 3
                 }
             ]
         };
@@ -418,16 +747,44 @@
         let currentQuestionIndex = 0;
         let score = 0;
         let selectedAnswer = null;
+        let totalPoints = 0;
+        let currentStreak = 0;
+        let maxStreak = 0;
+        let level = 1;
+
+        // Criar partículas de fundo
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = Math.random() * 10 + 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
 
         function showScreen(screenId) {
             document.querySelectorAll('.screen').forEach(screen => {
                 screen.classList.remove('active');
             });
             document.getElementById(screenId).classList.add('active');
+            
+            // Mostrar header apenas durante o quiz
+            const header = document.getElementById('game-header');
+            if (screenId === 'quiz-screen') {
+                header.style.display = 'flex';
+            } else {
+                header.style.display = 'none';
+            }
         }
 
         function showWelcome() {
             showScreen('welcome-screen');
+            resetQuiz();
         }
 
         function showSubjects() {
@@ -440,7 +797,14 @@
             currentQuestionIndex = 0;
             score = 0;
             showScreen('quiz-screen');
+            updatePointsDisplay();
             displayQuestion();
+        }
+
+        function updatePointsDisplay() {
+            document.getElementById('total-points').textContent = totalPoints;
+            document.getElementById('streak-count').textContent = maxStreak;
+            document.getElementById('level').textContent = level;
         }
 
         function displayQuestion() {
@@ -448,18 +812,27 @@
             const questionContainer = document.getElementById('current-question');
             const counter = document.getElementById('question-counter');
             const progressBar = document.getElementById('progress-bar');
+            const streakElement = document.getElementById('current-streak');
 
-            counter.innerHTML = `Pergunta ${currentQuestionIndex + 1} de ${questions[currentSubject].length}`;
+            counter.innerHTML = `📝 Pergunta ${currentQuestionIndex + 1} de ${questions[currentSubject].length}`;
             
             const progress = ((currentQuestionIndex + 1) / questions[currentSubject].length) * 100;
             progressBar.style.width = progress + '%';
+
+            // Mostrar streak atual se > 0
+            if (currentStreak > 0) {
+                streakElement.style.display = 'block';
+                document.getElementById('streak-display').textContent = currentStreak;
+            } else {
+                streakElement.style.display = 'none';
+            }
 
             questionContainer.innerHTML = `
                 <div class="question">
                     <h3>${question.question}</h3>
                     <ul class="options">
                         ${question.options.map((option, index) => 
-                            `<li onclick="selectAnswer(${index})" data-index="${index}">${option}</li>`
+                            `<li onclick="selectAnswer(${index})" data-index="${index}">${String.fromCharCode(65 + index)}) ${option}</li>`
                         ).join('')}
                     </ul>
                 </div>
@@ -499,9 +872,57 @@
 
             if (selectedAnswer === question.correct) {
                 score++;
+                currentStreak++;
+                if (currentStreak > maxStreak) {
+                    maxStreak = currentStreak;
+                }
+                
+                // Calcular pontos (base + bonus por streak)
+                let points = 10 + (currentStreak * 2);
+                totalPoints += points;
+                
+                // Animação de pontos
+                showPointsAnimation(points);
+                
+                // Verificar level up
+                if (totalPoints >= level * 100) {
+                    level++;
+                    showLevelUpAnimation();
+                }
+            } else {
+                currentStreak = 0;
             }
 
+            updatePointsDisplay();
             document.getElementById('next-btn').style.display = 'inline-block';
+        }
+
+        function showPointsAnimation(points) {
+            const animation = document.createElement('div');
+            animation.className = 'points-animation';
+            animation.textContent = `+${points} 💰`;
+            animation.style.left = '50%';
+            animation.style.top = '30%';
+            document.body.appendChild(animation);
+            
+            setTimeout(() => {
+                document.body.removeChild(animation);
+            }, 2000);
+        }
+
+        function showLevelUpAnimation() {
+            const animation = document.createElement('div');
+            animation.className = 'points-animation';
+            animation.textContent = `🎉 LEVEL UP! 🎉`;
+            animation.style.left = '50%';
+            animation.style.top = '20%';
+            animation.style.color = '#ff6b6b';
+            animation.style.fontSize = '2.5em';
+            document.body.appendChild(animation);
+            
+            setTimeout(() => {
+                document.body.removeChild(animation);
+            }, 3000);
         }
 
         function nextQuestion() {
@@ -517,21 +938,27 @@
         function showResults() {
             const totalQuestions = questions[currentSubject].length;
             const percentage = (score / totalQuestions) * 100;
+            const pointsEarned = totalPoints - (totalPoints - (score * 10 + maxStreak * 2));
             
             document.getElementById('final-score').innerHTML = 
-                `Você acertou ${score} de ${totalQuestions} perguntas (${percentage.toFixed(1)}%)`;
+                `🎯 ${score} de ${totalQuestions} perguntas corretas<br>
+                 📊 ${percentage.toFixed(1)}% de aproveitamento`;
+            
+            document.getElementById('points-earned').innerHTML = 
+                `💰 +${pointsEarned} pontos ganhos!<br>
+                 🔥 Maior sequência: ${maxStreak}`;
             
             const resultMessage = document.getElementById('result-message');
             
             if (percentage >= 80) {
                 resultMessage.className = 'result excellent';
-                resultMessage.innerHTML = '🎉 Excelente! Você domina bem o assunto!';
+                resultMessage.innerHTML = '🏆 EXCELENTE! Você é um gênio! 🌟<br>Continue assim e conquiste o mundo!';
             } else if (percentage >= 60) {
                 resultMessage.className = 'result good';
-                resultMessage.innerHTML = '👍 Bom trabalho! Continue estudando para melhorar ainda mais!';
+                resultMessage.innerHTML = '👍 MUITO BOM! Você está no caminho certo! 🚀<br>Continue estudando para ser ainda melhor!';
             } else {
                 resultMessage.className = 'result needs-improvement';
-                resultMessage.innerHTML = '📚 Precisa estudar mais! Não desista, a prática leva à perfeição!';
+                resultMessage.innerHTML = '💪 CONTINUE TENTANDO! Todo expert já foi iniciante! 📚<br>A prática leva à perfeição!';
             }
             
             showScreen('result-screen');
@@ -542,7 +969,11 @@
             currentQuestionIndex = 0;
             score = 0;
             selectedAnswer = null;
+            currentStreak = 0;
         }
+
+        // Inicializar partículas quando a página carregar
+        window.addEventListener('load', createParticles);
     </script>
 </body>
 </html>
